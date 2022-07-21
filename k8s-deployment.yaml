@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-extrenel
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: extrenel
+  template:
+    metadata:
+      labels:
+        app: extrenel
+    spec:
+      containers:
+      - name: extrenel
+        image: jay899/external:150
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+# service type loadbalancer       
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: extrenel-svc
+spec:
+  selector:
+    app: extrenel
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+  type: LoadBalancer
