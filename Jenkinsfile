@@ -36,16 +36,33 @@ pipeline {
                 }
             }
             }
- 		stage('Login') {
+	stage('Login') {
 
 			steps {
 				script{
-                    docker.withRegistry('',registryCredential){
-                        dockerImage.push("${env.BUILD_ID}")
-                    }
+               //docker.withRegistry('',registryCredential)
+		withCredentials([string(credentialsId: 'dockerpassword', variable: 'dockerpassword')])
+					
+					{
+	        //sh 'docker build -t  .
+		sh "docker login -u 'jay899' -p ${dockerpassword} "       
+                sh "docker build -t jay899/int:${env.BUILD_ID} ."		    
+		sh "docker images"
+	        sh "docker login docker.io"
+  		sh "docker push jay899/int:${env.BUILD_ID}"
+		    //sh 'docker push external:${env.BUILD_ID}' 
+	            //sh 'docker push external:${env.BUILD_ID}'
+	            
+                    //dockerImage.push(jay899/'${env.BUILD_ID}')
+		    
+		    //docker push ('${env.BUILD_ID}')}		
+                    
+                    //docker login --username='${dockerHubUser}' --password='${dockerHubPassword}'
+                    
                 }
 			}
-		} 
+		}           
+		}
          stage('deploy to k8s') {
              agent {
                 docker { 
