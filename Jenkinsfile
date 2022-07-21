@@ -63,27 +63,19 @@ pipeline {
 			}
 		}           
 		}
-         stage('deploy to k8s') {
-             agent {
-                docker { 
-                    image 'google/cloud-sdk:latest'
-                    args '-e HOME=/tmp'
-                    reuseNode true
-                        }
-                    }
-            steps {
-                echo 'Get cluster credentials'
-                sh 'gcloud container clusters get-credentials demo-cluster --zone us-central1-c --project roidtc-june22-u100'
-                sh "kubectl set image deployment/internal-deployment events-internal=${env.imageName}:${env.BUILD_ID} --namespace=events"
-
-             }
-        }     
-        stage('Remove local docker image') {
-            steps{
-                echo "pending"
-                // sh "docker rmi $imageName:latest"
-                sh "docker rmi -f ${env.imageName}:${env.BUILD_ID}"
-            }
+	stage ('K8S Deploy') {
+        steps {
+            script {
+		    sh "ls -ltha"
+		    //sh "kubectl apply -f "k8s-deployment.yaml""
+                kubernetesDeploy(
+		    	
+                    configs: 'k8s-deployment.yaml',
+                    kubeconfigId: 'aks',
+                    enableConfigSubstitution: true
+		)}
+	}
+	}
         }
     }
 }
