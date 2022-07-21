@@ -16,8 +16,8 @@ pipeline {
             }
             steps {
                 echo 'Retrieve source from github' 
-                git branch: 'master',
-                    url: 'https://github.com/beachedcoder/2022_6_27_devops_internal.git'
+                git branch: 'main',
+                    url: 'https://github.com/jayram98/internal.git'
                 echo 'showing files from repo?' 
                 sh 'ls -a'
                 echo 'install dependencies' 
