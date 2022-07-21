@@ -36,16 +36,16 @@ pipeline {
                 }
             }
             }
-        stage('Push Image') {
-            steps{
-                script {
-                    echo 'pushing the image to docker hub' 
+ 		stage('Login') {
+
+			steps {
+				script{
                     docker.withRegistry('',registryCredential){
                         dockerImage.push("${env.BUILD_ID}")
                     }
                 }
-            }
-        }     
+			}
+		} 
          stage('deploy to k8s') {
              agent {
                 docker { 
