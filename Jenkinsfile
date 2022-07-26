@@ -70,7 +70,7 @@ pipeline {
 		    //sh "kubectl apply -f "k8s-deployment.yaml""
                 kubernetesDeploy(
 		    	
-                    configs: 'k8s-deployment.yaml',
+                    configs: 'k8s-deployment.yaml,internal-deployment.yaml,internal-namespace.yaml,internal-service.yaml',
                     kubeconfigId: 'aks',
                     enableConfigSubstitution: true
 		)}
